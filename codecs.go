@@ -4,26 +4,26 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/wrappers"
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/bson/bsonrw"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
-	"github.com/amsokol/mongo-go-driver-protobuf/pmongo"
+	"github.com/viamrobotics/mongo-go-driver-protobuf/pmongo"
 )
 
 var (
 	// Protobuf wrappers types
-	boolValueType   = reflect.TypeOf(wrappers.BoolValue{})
-	bytesValueType  = reflect.TypeOf(wrappers.BytesValue{})
-	doubleValueType = reflect.TypeOf(wrappers.DoubleValue{})
-	floatValueType  = reflect.TypeOf(wrappers.FloatValue{})
-	int32ValueType  = reflect.TypeOf(wrappers.Int32Value{})
-	int64ValueType  = reflect.TypeOf(wrappers.Int64Value{})
-	stringValueType = reflect.TypeOf(wrappers.StringValue{})
-	uint32ValueType = reflect.TypeOf(wrappers.UInt32Value{})
-	uint64ValueType = reflect.TypeOf(wrappers.UInt64Value{})
+	boolValueType   = reflect.TypeOf(wrapperspb.BoolValue{})
+	bytesValueType  = reflect.TypeOf(wrapperspb.BytesValue{})
+	doubleValueType = reflect.TypeOf(wrapperspb.DoubleValue{})
+	floatValueType  = reflect.TypeOf(wrapperspb.FloatValue{})
+	int32ValueType  = reflect.TypeOf(wrapperspb.Int32Value{})
+	int64ValueType  = reflect.TypeOf(wrapperspb.Int64Value{})
+	stringValueType = reflect.TypeOf(wrapperspb.StringValue{})
+	uint32ValueType = reflect.TypeOf(wrapperspb.UInt32Value{})
+	uint64ValueType = reflect.TypeOf(wrapperspb.UInt64Value{})
 
 	// Protobuf Timestamp type
 	timestampType = reflect.TypeOf(timestamppb.Timestamp{})

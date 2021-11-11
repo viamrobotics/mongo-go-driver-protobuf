@@ -30,8 +30,8 @@ It contains set of BSON marshal/unmarshal codecs for Google protocol buffers typ
 - Google protocol buffers types (wrappers): [https://github.com/golang/protobuf/blob/master/ptypes/wrappers/wrappers.proto](https://github.com/golang/protobuf/blob/master/ptypes/wrappers/wrappers.proto)
 - Google protocol buffers Timestamp type: [https://github.com/golang/protobuf/blob/master/ptypes/timestamp/timestamp.proto](https://github.com/golang/protobuf/blob/master/ptypes/timestamp/timestamp.proto)
 - MongoDB ObjectID type: [https://github.com/mongodb/mongo-go-driver/blob/master/bson/primitive/objectid.go](https://github.com/mongodb/mongo-go-driver/blob/master/bson/primitive/objectid.go)
-- MongoDB ObjectID my proto wrapper: [https://github.com/amsokol/mongo-go-driver-protobuf/blob/master/proto/mongodb/objectid.proto](https://github.com/amsokol/mongo-go-driver-protobuf/blob/master/proto/mongodb/objectid.proto)
-  
+- MongoDB ObjectID my proto wrapper: [https://github.com/viamrobotics/mongo-go-driver-protobuf/blob/master/proto/mongodb/objectid.proto](https://github.com/viamrobotics/mongo-go-driver-protobuf/blob/master/proto/mongodb/objectid.proto)
+
 ## Requirements
 
 - Google protocol buffers version `proto3`
@@ -42,7 +42,7 @@ It contains set of BSON marshal/unmarshal codecs for Google protocol buffers typ
 Installing using `go get`:
 
 ```bash
-go get -u github.com/amsokol/mongo-go-driver-protobuf
+go get -u github.com/viamrobotics/mongo-go-driver-protobuf
 ```
 
 or you don't need to do anything manually if you are using Go modules. Go modules installs necessary packages automatically.
@@ -52,7 +52,7 @@ or you don't need to do anything manually if you are using Go modules. Go module
 First install `protoc-gen-gotag` to make available Go language `tags` for proto messages
 
 ```bash
-go get -u github.com/amsokol/protoc-gen-gotag
+go get -u github.com/srikrsna/protoc-gen-gotag
 ```
 
 Next
@@ -60,4 +60,4 @@ Next
 1. Create free Altas mini MongoDB instance
 2. Create `experiments` database
 3. Create `proto` collection into `experiments` database
-4. Run this [example](https://github.com/amsokol/mongo-go-driver-protobuf/tree/master/examples/mongodb-rw)
+4. Run this [example](https://github.com/viamrobotics/mongo-go-driver-protobuf/tree/master/examples/mongodb-rw)

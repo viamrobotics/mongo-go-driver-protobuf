@@ -15,7 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	codecs "github.com/amsokol/mongo-go-driver-protobuf"
+	codecs "github.com/viamrobotics/mongo-go-driver-protobuf"
 )
 
 func main() {

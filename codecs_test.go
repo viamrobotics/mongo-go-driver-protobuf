@@ -12,8 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/amsokol/mongo-go-driver-protobuf/pmongo"
-	"github.com/amsokol/mongo-go-driver-protobuf/test"
+	"github.com/viamrobotics/mongo-go-driver-protobuf/pmongo"
+	"github.com/viamrobotics/mongo-go-driver-protobuf/test"
 )
 
 func TestCodecs(t *testing.T) {

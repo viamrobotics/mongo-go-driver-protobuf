@@ -1,11 +1,11 @@
-module github.com/amsokol/mongo-go-driver-protobuf
+module github.com/viamrobotics/mongo-go-driver-protobuf
 
 go 1.17
 
 require (
-	github.com/amsokol/protoc-gen-gotag v0.2.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/golang/protobuf v1.5.2
+	github.com/srikrsna/protoc-gen-gotag v0.6.0
 	go.mongodb.org/mongo-driver v1.7.4
 	google.golang.org/protobuf v1.27.1
 )

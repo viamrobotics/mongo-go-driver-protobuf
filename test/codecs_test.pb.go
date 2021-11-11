@@ -5,10 +5,10 @@ package test
 
 import (
 	fmt "fmt"
-	pmongo "github.com/amsokol/mongo-go-driver-protobuf/pmongo"
 	proto "github.com/golang/protobuf/proto"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
+	pmongo "github.com/viamrobotics/mongo-go-driver-protobuf/pmongo"
 	math "math"
 )
 

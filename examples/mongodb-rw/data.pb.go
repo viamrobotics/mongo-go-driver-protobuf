@@ -7,10 +7,10 @@
 package main
 
 import (
-	pmongo "github.com/amsokol/mongo-go-driver-protobuf/pmongo"
-	_ "github.com/amsokol/protoc-gen-gotag/tagger"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
+	_ "github.com/srikrsna/protoc-gen-gotag/tagger"
+	pmongo "github.com/viamrobotics/mongo-go-driver-protobuf/pmongo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
