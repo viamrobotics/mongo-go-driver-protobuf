@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/bson/bsonrw"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	timestamp "google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/amsokol/mongo-go-driver-protobuf/pmongo"
 )
@@ -26,7 +26,7 @@ var (
 	uint64ValueType = reflect.TypeOf(wrappers.UInt64Value{})
 
 	// Protobuf Timestamp type
-	timestampType = reflect.TypeOf(timestamp.Timestamp{})
+	timestampType = reflect.TypeOf(timestamppb.Timestamp{})
 
 	// Time type
 	timeType = reflect.TypeOf(time.Time{})
@@ -71,7 +71,7 @@ type timestampCodec struct {
 
 // EncodeValue encodes Protobuf Timestamp value to BSON value
 func (e *timestampCodec) EncodeValue(ectx bsoncodec.EncodeContext, vw bsonrw.ValueWriter, val reflect.Value) error {
-	v := val.Interface().(timestamp.Timestamp)
+	v := val.Interface().(timestamppb.Timestamp)
 	enc, err := ectx.LookupEncoder(timeType)
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func (e *timestampCodec) DecodeValue(ectx bsoncodec.DecodeContext, vr bsonrw.Val
 	if err = enc.DecodeValue(ectx, vr, reflect.ValueOf(&t).Elem()); err != nil {
 		return err
 	}
-	ts := timestamp.New(t)
+	ts := timestamppb.New(t)
 	val.Set(reflect.ValueOf(*ts))
 	return nil
 }
