@@ -1,20 +1,21 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"log"
 	"time"
 
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/golang/protobuf/ptypes/wrappers"
+
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/amsokol/mongo-go-driver-protobuf"
+	codecs "github.com/amsokol/mongo-go-driver-protobuf"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 	// NOTE: "mongodb+srv" protocol means connect to Altas cloud MongoDB server
 	//       use just "mongodb" if you connect to on-premise MongoDB server
 	client, err := mongo.NewClient(options.Client().
-		ApplyURI("mongodb+srv://USER:PASSWORD@SERVER/experiments").
+		ApplyURI("mongodb://localhost:27017/experiments").
 		SetRegistry(reg),
 	)
 
@@ -48,7 +49,7 @@ func main() {
 	coll := client.Database("experiments").Collection("proto")
 
 	// Create protobuf Timestamp value from golang Time
-	ts := ptypes.TimestampNow()
+	ts := timestamppb.Now()
 
 	// Fill in data structure
 	in := Data{
@@ -87,6 +88,7 @@ func main() {
 	// Insert data into the collection
 	res, err := coll.InsertOne(ctx, &in)
 	if err != nil {
+		spew.Dump(err)
 		log.Fatalf("insert data into collection <experiments.proto>: %#v", err)
 	}
 	id := res.InsertedID
@@ -102,11 +104,11 @@ func main() {
 		log.Fatalf("failed to read data (id=%v) from collection <experiments.proto>: %#v", id, err)
 	}
 
-	var b bytes.Buffer
-	m := &jsonpb.Marshaler{Indent: "  "}
-	if err := m.Marshal(&b, &out); err != nil {
+	m := protojson.MarshalOptions{Indent: "  "}
+	b, err := m.Marshal(out.ProtoReflect().Interface())
+	if err != nil {
 		log.Fatalf("jsonpb.Marshaler.Marshal error = %v", err)
 	}
 
-	log.Printf("read successfully:\n%s", b.String())
+	log.Printf("read successfully:\n%s", string(b))
 }
