@@ -2,6 +2,7 @@ syntax="proto3";
 package main;
 option go_package = "./main";
 
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "protoc-gen-gotag/tagger/tagger.proto";
@@ -38,5 +39,7 @@ message Data{
     uint64 uint64Value = 18;
     google.protobuf.UInt64Value uint64ProtoValue = 19;
 
-    google.protobuf.Timestamp timestamp = 20;
+    google.protobuf.Struct struct = 20;
+
+    google.protobuf.Timestamp timestamp = 21;
 }

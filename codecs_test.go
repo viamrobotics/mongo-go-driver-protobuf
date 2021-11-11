@@ -1,6 +1,7 @@
 package codecs
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 	"time"
@@ -8,9 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/viamrobotics/mongo-go-driver-protobuf/pmongo"
 	"github.com/viamrobotics/mongo-go-driver-protobuf/test"
 )
@@ -18,6 +21,25 @@ import (
 func TestCodecs(t *testing.T) {
 	rb := bson.NewRegistryBuilder()
 	r := Register(rb).Build()
+
+	ms := `{
+		"name": "Test",
+		"number": 12345,
+		"nestedMap": {
+			"foo": "bar"
+		},
+		"nestedArray": [
+			"a", "b", "c", "d"
+		]
+	}`
+	var m map[string]interface{}
+	json.Unmarshal([]byte(ms), &m)
+
+	sp, err := structpb.NewStruct(m)
+	if err != nil {
+		t.Errorf("structpb.NewStruct error = %v", err)
+		return
+	}
 
 	tm := time.Now()
 	// BSON accuracy is in milliseconds
@@ -52,6 +74,7 @@ func TestCodecs(t *testing.T) {
 		StringValue: &wrapperspb.StringValue{Value: "qwerty"},
 		Uint32Value: &wrapperspb.UInt32Value{Value: 12345},
 		Uint64Value: &wrapperspb.UInt64Value{Value: 123456789},
+		Struct:      sp,
 		Timestamp:   ts,
 		Id:          id,
 	}
@@ -66,6 +89,7 @@ func TestCodecs(t *testing.T) {
 		var out test.Data
 
 		if err = bson.UnmarshalWithRegistry(r, b, &out); err != nil {
+			spew.Dump(err)
 			t.Errorf("bson.UnmarshalWithRegistry error = %v", err)
 			return
 		}

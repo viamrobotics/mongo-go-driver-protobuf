@@ -2,6 +2,7 @@ syntax="proto3";
 package test;
 option go_package = "./test";
 
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -26,7 +27,9 @@ message Data{
 
     google.protobuf.UInt64Value uint64Value = 9;
 
-    google.protobuf.Timestamp timestamp = 10;
+    google.protobuf.Struct struct = 10;
 
-    pmongo.ObjectId id = 11;
+    google.protobuf.Timestamp timestamp = 11;
+
+    pmongo.ObjectId id = 12;
 }

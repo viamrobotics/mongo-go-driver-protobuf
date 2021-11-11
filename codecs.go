@@ -6,7 +6,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/bson/bsonrw"
+	"go.mongodb.org/mongo-driver/bson/bsontype"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
@@ -25,11 +27,20 @@ var (
 	uint32ValueType = reflect.TypeOf(wrapperspb.UInt32Value{})
 	uint64ValueType = reflect.TypeOf(wrapperspb.UInt64Value{})
 
+	// Protobuf Struct type
+	structType = reflect.TypeOf(structpb.Struct{})
+
+	// Map type
+	mapType = reflect.TypeOf(map[string]interface{}{})
+
 	// Protobuf Timestamp type
 	timestampType = reflect.TypeOf(timestamppb.Timestamp{})
 
 	// Time type
 	timeType = reflect.TypeOf(time.Time{})
+
+	// Slice type
+	sliceType = reflect.TypeOf([]interface{}{})
 
 	// ObjectId type
 	objectIDType          = reflect.TypeOf(pmongo.ObjectId{})
@@ -37,6 +48,7 @@ var (
 
 	// Codecs
 	wrapperValueCodecRef = &wrapperValueCodec{}
+	structCodecRef       = &structCodec{}
 	timestampCodecRef    = &timestampCodec{}
 	objectIDCodecRef     = &objectIDCodec{}
 )
@@ -63,6 +75,38 @@ func (e *wrapperValueCodec) DecodeValue(ectx bsoncodec.DecodeContext, vr bsonrw.
 		return err
 	}
 	return enc.DecodeValue(ectx, vr, val)
+}
+
+// structCodec is codec for Protobuf Struct
+type structCodec struct {
+}
+
+// EncodeValue encodes Protobuf Struct value to BSON value
+func (e *structCodec) EncodeValue(ectx bsoncodec.EncodeContext, vw bsonrw.ValueWriter, val reflect.Value) error {
+	v := val.Interface().(structpb.Struct)
+	enc, err := ectx.LookupEncoder(mapType)
+	if err != nil {
+		return err
+	}
+	return enc.EncodeValue(ectx, vw, reflect.ValueOf(v.AsMap()))
+}
+
+// DecodeValue decodes BSON value to Timestamp value
+func (e *structCodec) DecodeValue(ectx bsoncodec.DecodeContext, vr bsonrw.ValueReader, val reflect.Value) error {
+	enc, err := ectx.LookupDecoder(mapType)
+	if err != nil {
+		return err
+	}
+	var m map[string]interface{}
+	if err = enc.DecodeValue(ectx, vr, reflect.ValueOf(&m).Elem()); err != nil {
+		return err
+	}
+	st, err := structpb.NewStruct(m)
+	if err != nil {
+		return err
+	}
+	val.Set(reflect.ValueOf(*st))
+	return nil
 }
 
 // timestampCodec is codec for Protobuf Timestamp
@@ -133,6 +177,7 @@ func (e *objectIDCodec) DecodeValue(ectx bsoncodec.DecodeContext, vr bsonrw.Valu
 
 // Register registers Google protocol buffers types codecs
 func Register(rb *bsoncodec.RegistryBuilder) *bsoncodec.RegistryBuilder {
+	rb.RegisterTypeMapEntry(bsontype.Array, sliceType)
 	return rb.RegisterCodec(boolValueType, wrapperValueCodecRef).
 		RegisterCodec(bytesValueType, wrapperValueCodecRef).
 		RegisterCodec(doubleValueType, wrapperValueCodecRef).
@@ -142,6 +187,7 @@ func Register(rb *bsoncodec.RegistryBuilder) *bsoncodec.RegistryBuilder {
 		RegisterCodec(stringValueType, wrapperValueCodecRef).
 		RegisterCodec(uint32ValueType, wrapperValueCodecRef).
 		RegisterCodec(uint64ValueType, wrapperValueCodecRef).
+		RegisterCodec(structType, structCodecRef).
 		RegisterCodec(timestampType, timestampCodecRef).
 		RegisterCodec(objectIDType, objectIDCodecRef)
 }
